@@ -49,11 +49,7 @@ public class Player : MonoBehaviour
         _isHoldingSeed = true;
 
         // STEP 4 -------------------------------------------------------------
-        // Fix this line so that the Player GameObject is the PARENT of the seed.
-        // That way, the seed will move with the player.
-
-        GameObject seed = Instantiate(_seedPrefab);
-
+        GameObject seed = Instantiate(_seedPrefab, transform);
         // STEP 4 -------------------------------------------------------------
 
         _seedRB = seed.GetComponent<Rigidbody>();
@@ -62,15 +58,11 @@ public class Player : MonoBehaviour
         _seedCollider.enabled = false;
 
         // STEP 5 -------------------------------------------------------------
-        // Set the position of the seed to be DIRECLTY TO THE LEFT of the PLAYER.
-        // You might want to use _spawnUp and _spawnLeft to put the seed to the
-        //      left and slightly above the player.
-        // You will probably also need Transform.TransformDirection() ;)
-
-        
+        seed.transform.position = transform.position
+            + transform.TransformDirection(Vector3.left * _spawnLeft + Vector3.up * _spawnUp);
         // STEP 5 -------------------------------------------------------------
     }
-    
+
     // ------------------------------------------------------------------------
     private void ThrowSeed ()
     {
@@ -89,10 +81,7 @@ public class Player : MonoBehaviour
         _seedCollider = null;
 
         // STEP 7 -------------------------------------------------------------
-        // Set the animation parameters to play the throwing animation.
-        
-
-
+        _animator.SetTrigger("Throw");
         // STEP 7 -------------------------------------------------------------
     }
 
@@ -117,11 +106,8 @@ public class Player : MonoBehaviour
         );
 
         // STEP 8 -------------------------------------------------------------
-        // Set the animation parameters to play the walking animation.
-        // You might need the mouseY, mouseX, vertical, and horizontal variables
-        //      that are above this step :)
-
-
+        bool isMoving = vertical != 0 || horizontal != 0;
+        _animator.SetBool("IsWalking", isMoving);
         // STEP 8 -------------------------------------------------------------
     }
 }
